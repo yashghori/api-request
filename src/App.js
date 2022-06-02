@@ -1,24 +1,37 @@
-import logo from './logo.svg';
-import './App.css';
+import { useEffect, useState } from "react";
+import "./App.css";
+import axios from "axios";
 
 function App() {
+  const [data, setData] = useState([]);
+  useEffect(() => {
+    async function getData() {
+      const result = await axios.get(`https://fakestoreapi.com/products`);
+      setData(result.data);
+    }
+    getData();
+  });
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      {data.length !== 0 ? (
+        <div className="App">
+          <h1 style={{ color: "royalblue" }}>Let's Shope</h1>
+          <div className="box">
+            {data.map((item, index) => {
+              return (
+                <div key={index} className="item">
+                  <img src={item.image} alt={item.title} />
+                  <h3>{item.title}</h3>
+                  <p>${item.price}</p>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      ) : (
+        <div>Loading...</div>
+      )}
+    </>
   );
 }
 
